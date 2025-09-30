@@ -31,7 +31,7 @@ export default function Home() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">Набор Слова</h1>
           <p className="text-xl text-muted-foreground mb-8">
-            Современный тренажёр печати
+            Современный тренажёр для обучения быстрой печати
           </p>
           
           <div className="flex gap-4 justify-center mb-8">
