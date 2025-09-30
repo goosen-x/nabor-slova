@@ -138,4 +138,13 @@
   .text-green-800 { @apply text-green-800; }
   .bg-yellow-100 { @apply bg-yellow-100; }
   .text-yellow-800 { @apply text-yellow-800; }
+  
+  /* Скрыть полосу прокрутки */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
 }

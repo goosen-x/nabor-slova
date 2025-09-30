@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { TypingEngine } from '@/lib/typing-engine';
 import { TypingState, TypingStats as TypingStatsType, TypingLesson } from '@/types/typing';
 import TextDisplay from './TextDisplay';
+import TextDisplayCentered from './TextDisplayCentered';
 import TypingStats from './TypingStats';
 import LanguageIndicator from './LanguageIndicator';
 import { Button } from '@/components/ui/button';
@@ -39,6 +40,7 @@ const TypingTrainer: React.FC<TypingTrainerProps> = ({
   });
   const [showResults, setShowResults] = useState(false);
   const [hasCheckedLayout, setHasCheckedLayout] = useState(false);
+  const [useCenteredView, setUseCenteredView] = useState(true);
 
   // Инициализация движка
   useEffect(() => {
@@ -213,13 +215,23 @@ const TypingTrainer: React.FC<TypingTrainerProps> = ({
       <Card className='mb-4'>
         <CardContent className='p-0'>
           {state && (
-            <TextDisplay
-              text={state.text}
-              userInput={state.userInput}
-              currentPosition={state.currentPosition}
-              errors={state.errors}
-              corrections={state.corrections}
-            />
+            useCenteredView ? (
+              <TextDisplayCentered
+                text={state.text}
+                userInput={state.userInput}
+                currentPosition={state.currentPosition}
+                errors={state.errors}
+                corrections={state.corrections}
+              />
+            ) : (
+              <TextDisplay
+                text={state.text}
+                userInput={state.userInput}
+                currentPosition={state.currentPosition}
+                errors={state.errors}
+                corrections={state.corrections}
+              />
+            )
           )}
         </CardContent>
       </Card>
@@ -265,6 +277,7 @@ const TypingTrainer: React.FC<TypingTrainerProps> = ({
                 <div className='text-center p-3 border rounded-md'>
                   <div className='text-sm text-muted-foreground'>Точность</div>
                   <div className='text-lg font-bold'>{result.accuracy}%</div>
+                  <div className='text-xs text-muted-foreground mt-1'>{result.totalKeyPresses} нажатий</div>
                 </div>
                 <div className='text-center p-3 border rounded-md'>
                   <div className='text-sm text-muted-foreground'>Время</div>
@@ -280,6 +293,11 @@ const TypingTrainer: React.FC<TypingTrainerProps> = ({
                     <div className='text-lg font-bold text-yellow-700'>{result.correctionsCount}</div>
                   </div>
                 )}
+                <div className='text-center p-3 border rounded-md border-blue-200 bg-blue-50 col-span-2'>
+                  <div className='text-sm text-muted-foreground'>Чистота набора</div>
+                  <div className='text-lg font-bold text-blue-700'>{result.cleanTypingPercentage}%</div>
+                  <div className='text-xs text-muted-foreground mt-1'>Без исправлений</div>
+                </div>
               </div>
             </>
           )}

@@ -21,7 +21,8 @@ export class TypingEngine {
       isActive: false,
       isCompleted: false,
       text: text,
-      userInput: ''
+      userInput: '',
+      totalKeyPresses: 0
     };
     
     this.onStateChange = onStateChange;
@@ -86,6 +87,7 @@ export class TypingEngine {
     if (!this.state.isActive || this.state.isCompleted) {
       if (key.length === 1 || key === ' ') {
         this.start();
+        this.state.totalKeyPresses++; // Считаем первое нажатие
       }
       return false;
     }
@@ -93,6 +95,7 @@ export class TypingEngine {
     // Обработка специальных клавиш
     if (key === 'Backspace') {
       if (this.state.userInput.length > 0) {
+        this.state.totalKeyPresses++; // Считаем Backspace как нажатие
         const newInput = this.state.userInput.slice(0, -1);
         return this.handleInput(newInput);
       }
@@ -101,6 +104,7 @@ export class TypingEngine {
 
     // Обработка обычных символов
     if (key.length === 1) {
+      this.state.totalKeyPresses++; // Считаем каждое нажатие
       const newInput = this.state.userInput + key;
       return this.handleInput(newInput);
     }
@@ -126,21 +130,29 @@ export class TypingEngine {
     const errorsCount = this.state.errors.size;
     const correctionsCount = this.state.corrections.size;
     const correctCharacters = charactersTyped - errorsCount;
+    const totalKeyPresses = this.state.totalKeyPresses;
     
     // WPM расчет (стандартное слово = 5 символов)
     const wpm = Math.round((correctCharacters / 5) / (totalTime / 60));
     
-    // Точность
-    const accuracy = charactersTyped > 0 ? Math.round((correctCharacters / charactersTyped) * 100) : 0;
+    // Точность на основе всех нажатий
+    const accuracy = totalKeyPresses > 0 ? Math.round((correctCharacters / totalKeyPresses) * 100) : 0;
+    
+    // Чистота набора (без исправлений)
+    const cleanTypingPercentage = charactersTyped > 0 
+      ? Math.round(((charactersTyped - correctionsCount) / charactersTyped) * 100) 
+      : 100;
 
     return {
       wpm,
       accuracy,
+      cleanTypingPercentage,
       totalTime,
       errorsCount,
       correctionsCount,
       charactersTyped,
-      correctCharacters
+      correctCharacters,
+      totalKeyPresses
     };
   }
 
@@ -149,10 +161,12 @@ export class TypingEngine {
       return {
         wpm: 0,
         accuracy: 0,
+        cleanTypingPercentage: 100,
         totalTime: 0,
         errorsCount: 0,
         correctionsCount: 0,
-        charactersPerSecond: 0
+        charactersPerSecond: 0,
+        totalKeyPresses: 0
       };
     }
 
@@ -162,12 +176,20 @@ export class TypingEngine {
     const errorsCount = this.state.errors.size;
     const correctionsCount = this.state.corrections.size;
     const correctCharacters = Math.max(0, charactersTyped - errorsCount);
+    const totalKeyPresses = this.state.totalKeyPresses;
     
     // WPM расчет
     const wpm = totalTime > 0 ? Math.round((correctCharacters / 5) / (totalTime / 60)) : 0;
     
-    // Точность
-    const accuracy = charactersTyped > 0 ? Math.round((correctCharacters / charactersTyped) * 100) : 100;
+    // Точность на основе всех нажатий
+    const accuracy = totalKeyPresses > 0 
+      ? Math.round((correctCharacters / totalKeyPresses) * 100) 
+      : 100;
+    
+    // Чистота набора (без исправлений)
+    const cleanTypingPercentage = charactersTyped > 0 
+      ? Math.round(((charactersTyped - correctionsCount) / charactersTyped) * 100) 
+      : 100;
     
     // Символы в секунду
     const charactersPerSecond = totalTime > 0 ? Math.round(correctCharacters / totalTime) : 0;
@@ -175,10 +197,12 @@ export class TypingEngine {
     return {
       wpm: Math.max(0, wpm),
       accuracy: Math.max(0, Math.min(100, accuracy)),
+      cleanTypingPercentage: Math.max(0, Math.min(100, cleanTypingPercentage)),
       totalTime,
       errorsCount,
       correctionsCount,
-      charactersPerSecond
+      charactersPerSecond,
+      totalKeyPresses
     };
   }
 
@@ -231,7 +255,8 @@ export class TypingEngine {
       isActive: false,
       isCompleted: false,
       text: text,
-      userInput: ''
+      userInput: '',
+      totalKeyPresses: 0
     };
     this.notifyStateChange();
     this.updateStats();

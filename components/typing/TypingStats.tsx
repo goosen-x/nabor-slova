@@ -56,6 +56,12 @@ const TypingStats: React.FC<TypingStatsProps> = ({
       />
       
       <StatBox
+        label='Чистота'
+        value={stats.cleanTypingPercentage}
+        unit='%'
+      />
+      
+      <StatBox
         label='Ошибки'
         value={stats.errorsCount}
       />

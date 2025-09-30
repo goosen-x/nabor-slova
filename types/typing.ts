@@ -3,11 +3,13 @@
 export interface TypingResult {
   wpm: number;
   accuracy: number;
+  cleanTypingPercentage: number;
   totalTime: number;
   errorsCount: number;
   correctionsCount: number;
   charactersTyped: number;
   correctCharacters: number;
+  totalKeyPresses: number;
 }
 
 export interface TypingState {
@@ -20,15 +22,18 @@ export interface TypingState {
   isCompleted: boolean;
   text: string;
   userInput: string;
+  totalKeyPresses: number;
 }
 
 export interface TypingStats {
   wpm: number;
   accuracy: number;
+  cleanTypingPercentage: number;
   totalTime: number;
   errorsCount: number;
   correctionsCount: number;
   charactersPerSecond: number;
+  totalKeyPresses: number;
 }
 
 export interface TypingLesson {
