@@ -34,9 +34,12 @@ const TypingTrainer: React.FC<TypingTrainerProps> = ({
   const [stats, setStats] = useState<TypingStatsType>({
     wpm: 0,
     accuracy: 0,
+    cleanTypingPercentage: 100,
     totalTime: 0,
     errorsCount: 0,
-    charactersPerSecond: 0
+    correctionsCount: 0,
+    charactersPerSecond: 0,
+    totalKeyPresses: 0
   });
   const [showResults, setShowResults] = useState(false);
   const [hasCheckedLayout, setHasCheckedLayout] = useState(false);
