@@ -63,7 +63,8 @@ const TypingTrainer: React.FC<TypingTrainerProps> = ({
       isActive: false,
       isCompleted: false,
       text: lesson.text,
-      userInput: ''
+      userInput: '',
+      totalKeyPresses: 0
     });
 
     return () => {

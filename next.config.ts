@@ -3,9 +3,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  experimental: {
-    outputFileTracingRoot: path.join(__dirname, "../../"),
-  },
+  outputFileTracingRoot: path.join(__dirname, "../../"),
   images: {
     unoptimized: false,
     domains: ["nabor-slova.ru"], // Замените на ваш домен
